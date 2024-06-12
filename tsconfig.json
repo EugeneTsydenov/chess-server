@@ -16,6 +16,15 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
+    "paths": {
+      "@src/*": ["src/*"],
+      "@application/*": ["src/application/*"],
+      "@domain/*": ["src/domain/*"],
+      "@presentation/*": ["src/presentation/*"],
+      "@infrastructure/*": ["src/infrastructure/*"],
+      "@frameworks/*": ["src/frameworks/*"],
+      "@common/*": ["src/common/*"],
+    },
     "noFallthroughCasesInSwitch": false
   }
 }

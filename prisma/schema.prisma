@@ -19,6 +19,7 @@ model User {
   password     String
   email        String
   display_name String
+  games        Int
   avatar       String
   rating       Int
   wins         Int

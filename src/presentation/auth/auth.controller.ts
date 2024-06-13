@@ -1,11 +1,12 @@
 import { IAuthController } from './IAuthController';
 import { Body, Controller, Post } from '@nestjs/common';
-
+import { LoginUseCase } from '@application/auth';
 @Controller('auth')
 export class AuthController implements IAuthController {
+  constructor(private loginUseCase: LoginUseCase) {}
   @Post('login')
   login(@Body() userData: any): any {
-    return 'login';
+    return this.loginUseCase.execute();
   }
 
   @Post('logout')

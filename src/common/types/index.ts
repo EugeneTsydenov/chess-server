@@ -1,7 +1,7 @@
 export type GameSide = 'w' | 'b';
 
 export interface UseCase<args, returned> {
-  execute(...args: args[]): returned;
+  execute(...args: args[]): Promise<returned>;
 }
 
 interface ISecret {

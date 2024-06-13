@@ -1,9 +1,9 @@
 import { GameSide } from '@common/types';
 
 export interface IGame {
-  id: bigint;
-  whitePlayer: bigint;
-  blackPlayer: bigint;
+  id: number;
+  whitePlayer: number;
+  blackPlayer: number;
   winner: GameSide;
   loser: GameSide;
   moves: string[];

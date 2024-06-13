@@ -1,7 +1,7 @@
 import { IAuth } from './IAuth';
 
 export class AuthEntity implements IAuth {
-  id: bigint;
+  id: number;
   jti: string;
-  userId: bigint;
+  userId: number;
 }

@@ -3,10 +3,9 @@ import { UserRepository } from '@infrastructure/user';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class LoginUseCase implements UseCase<string, number> {
+export class LoginUseCase implements UseCase<string, any> {
   constructor(private userRepository: UserRepository) {}
-  async execute() {
-    await this.userRepository.saveUser();
-    return 1;
+  execute() {
+    return this.userRepository.saveUser();
   }
 }

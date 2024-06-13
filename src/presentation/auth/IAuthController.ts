@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
 
 export interface IAuthController {
-  register(userData: any): any;
-  login(userData: any): any;
-  refresh(userData: any): any;
-  logout(userData: any): any;
+  register(userData: any): Observable<any>;
+  login(userData: any): Observable<any>;
+  refresh(userData: any): Observable<any>;
+  logout(userData: any): Observable<any>;
 }

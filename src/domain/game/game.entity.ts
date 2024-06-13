@@ -2,11 +2,11 @@ import { IGame } from './IGame';
 import { GameSide } from '@common/types';
 
 export class GameEntity implements IGame {
-  blackPlayer: bigint;
+  blackPlayer: number;
   date: Date;
-  id: bigint;
+  id: number;
   loser: GameSide;
   moves: string[];
-  whitePlayer: bigint;
+  whitePlayer: number;
   winner: GameSide;
 }

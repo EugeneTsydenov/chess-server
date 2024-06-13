@@ -1,5 +1,5 @@
 export interface IAuth {
-  id: bigint;
+  id: number;
   jti: string;
-  userId: bigint;
+  userId: number;
 }

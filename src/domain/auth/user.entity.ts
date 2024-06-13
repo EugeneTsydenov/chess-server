@@ -1,7 +1,7 @@
 import { IUser } from './IUser';
 
 export class UserEntity implements IUser {
-  id: bigint;
+  id: number;
   username: string;
   avatar: string;
   draws: number;

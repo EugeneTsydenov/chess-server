@@ -14,7 +14,7 @@ datasource db {
 }
 
 model User {
-  id           BigInt   @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   username     String
   password     String
   email        String
@@ -33,10 +33,10 @@ model User {
 }
 
 model Game {
-  id           BigInt   @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   date         DateTime @db.Timestamptz(6)
-  white_player BigInt
-  black_player BigInt
+  white_player Int
+  black_player Int
   winner       String
   loser        String
   moves        String[]
@@ -45,9 +45,9 @@ model Game {
 }
 
 model Token {
-  id      BigInt @id @default(autoincrement())
+  id      Int    @id @default(autoincrement())
   jti     String
-  user_id BigInt @unique
+  user_id Int    @unique
   user    User   @relation(fields: [user_id], references: [id])
 
   @@map(name: "tokens")

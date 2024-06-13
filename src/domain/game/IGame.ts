@@ -1,11 +1,11 @@
-import { GameColors } from '@common/types';
+import { GameSide } from '@common/types';
 
 export interface IGame {
   id: bigint;
-  white_player: bigint;
-  black_player: bigint;
-  winner: GameColors;
-  loser: GameColors;
+  whitePlayer: bigint;
+  blackPlayer: bigint;
+  winner: GameSide;
+  loser: GameSide;
   moves: string[];
   date: Date;
 }

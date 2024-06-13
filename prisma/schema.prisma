@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           BigInt   @id @default(autoincrement())
+  username     String
+  password     String
+  email        String
+  display_name String
+  avatar       String
+  rating       Int
+  wins         Int
+  losses       Int
+  created_at   DateTime @default(now()) @db.Timestamptz(6)
+  updated_at   DateTime @db.Timestamptz(6)
+  draws        Int
+  Token        Token?
+
+  @@map(name: "users")
+}
+
+model Game {
+  id           BigInt   @id @default(autoincrement())
+  date         DateTime @db.Timestamptz(6)
+  white_player BigInt
+  black_player BigInt
+  winner       String
+  loser        String
+  moves        String[]
+
+  @@map(name: "games")
+}
+
+model Token {
+  id      BigInt @id @default(autoincrement())
+  jti     String
+  user_id BigInt @unique
+  user    User   @relation(fields: [user_id], references: [id])
+
+  @@map(name: "tokens")
+}

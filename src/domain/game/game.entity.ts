@@ -1,12 +1,12 @@
 import { IGame } from './IGame';
-import { GameColors } from '../../common/types';
+import { GameSide } from '@common/types';
 
 class GameEntity implements IGame {
-  black_player: bigint;
+  blackPlayer: bigint;
   date: Date;
   id: bigint;
-  loser: GameColors;
+  loser: GameSide;
   moves: string[];
-  white_player: bigint;
-  winner: GameColors;
+  whitePlayer: bigint;
+  winner: GameSide;
 }

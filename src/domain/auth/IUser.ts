@@ -3,10 +3,10 @@ export interface IUser {
   username: string;
   email: string;
   password: string;
-  display_name: string;
+  displayName: string;
   avatar: string;
-  created_at: Date;
-  updated_at: Date;
+  createdAt: Date;
+  updatedAt: Date;
   rating: number;
   games: number;
   wins: number;

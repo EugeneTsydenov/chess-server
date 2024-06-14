@@ -2,8 +2,8 @@ import { Observable } from 'rxjs';
 
 export type GameSide = 'w' | 'b';
 
-export interface UseCase<args, returned> {
-  execute(...args: args[]): Observable<returned>;
+export interface UseCase<input, returned> {
+  execute(input: input): Observable<returned>;
 }
 
 interface ISecret {

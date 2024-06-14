@@ -1,1 +1,2 @@
-export { AuthEntity } from './auth.entity';
+export { UserEntity } from './user.entity';
+export { IUserFromDb } from './model/IUserFromDb';

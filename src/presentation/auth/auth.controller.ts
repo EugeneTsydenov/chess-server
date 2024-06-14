@@ -1,7 +1,20 @@
 import { IAuthController } from './IAuthController';
-import { Body, Controller, Post } from '@nestjs/common';
-import { LoginUseCase, RegisterUseCase } from '@application/auth';
-import { from } from 'rxjs';
+import {
+  Body,
+  Controller,
+  HttpException,
+  Next,
+  Post,
+  Res,
+} from '@nestjs/common';
+import {
+  IRegisterUserInput,
+  LoginUseCase,
+  RegisterUseCase,
+  RegisterUseCaseInputDto,
+} from '@application/auth';
+import { catchError, EMPTY, from } from 'rxjs';
+import { NextFunction, Response } from 'express';
 @Controller('auth')
 export class AuthController implements IAuthController {
   constructor(
@@ -19,12 +32,27 @@ export class AuthController implements IAuthController {
   }
 
   @Post('refresh')
-  refresh(userData: any) {
-    return this.registerUseCase.execute();
+  refresh() {
+    return from('refresh');
   }
 
   @Post('register')
-  register(userData: any) {
-    return from('register');
+  register(
+    @Body() userInput: IRegisterUserInput,
+    @Res() res: Response,
+    @Next() next: NextFunction,
+  ): any {
+    const transformedUserInput = new RegisterUseCaseInputDto(userInput);
+    this.registerUseCase
+      .execute(transformedUserInput)
+      .pipe(
+        catchError((err) => {
+          next(err);
+          return EMPTY;
+        }),
+      )
+      .subscribe((r) => {
+        res.json(r);
+      });
   }
 }

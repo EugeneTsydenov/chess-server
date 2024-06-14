@@ -1,4 +1,5 @@
 import { IUser } from './IUser';
+import { IUserFromDb } from '@domain/user/model/IUserFromDb';
 
 export class UserEntity implements IUser {
   id: number;
@@ -15,7 +16,7 @@ export class UserEntity implements IUser {
   displayName: string;
   updatedAt: Date;
 
-  constructor(user: IUser) {
+  constructor(user: IUserFromDb) {
     this.id = user.id;
     this.username = user.username;
     this.avatar = user.avatar;
@@ -26,8 +27,8 @@ export class UserEntity implements IUser {
     this.rating = user.rating;
     this.wins = user.wins;
     this.email = user.email;
-    this.createdAt = user.createdAt;
-    this.updatedAt = user.updatedAt;
-    this.displayName = user.displayName;
+    this.createdAt = user.created_at;
+    this.updatedAt = user.updated_at;
+    this.displayName = user.display_name;
   }
 }

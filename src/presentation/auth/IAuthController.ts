@@ -1,4 +1,4 @@
-import { NextFunction, Response } from 'express';
+import { NextFunction, Response, Request } from 'express';
 import { ILoginInput, IRegisterInput } from '@application/auth';
 
 export interface IAuthController {
@@ -8,6 +8,6 @@ export interface IAuthController {
     next: NextFunction,
   ): Promise<void>;
   login(body: ILoginInput, res: Response, next: NextFunction): Promise<void>;
-  refresh(userData: any): Promise<void>;
+  refresh(req: Request, res: Response, next: NextFunction): Promise<void>;
   logout(userData: any): Promise<void>;
 }

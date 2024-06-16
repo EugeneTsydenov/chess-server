@@ -1,8 +1,13 @@
-import { HttpException, Injectable } from '@nestjs/common';
-import { ITokenService, IPairOfTokens } from './ITokenService';
+import {
+  HttpException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { IPairOfTokens, ITokenService } from './ITokenService';
 import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
 import * as process from 'node:process';
+import { IJwtPayload } from '@application/auth/model/IJwtPayload';
 
 @Injectable()
 export class TokenService implements ITokenService {
@@ -49,7 +54,29 @@ export class TokenService implements ITokenService {
     }
   }
 
-  verifyAccessToken(accessToken: string): void {}
+  async verifyAccessToken(accessToken: string): Promise<IJwtPayload> {
+    try {
+      return await this.jwtService.verifyAsync<IJwtPayload>(accessToken, {
+        secret: process.env.ACCESS_SECRET_KEY,
+      });
+    } catch (_) {
+      throw new UnauthorizedException({
+        message: 'User is unauthorized!',
+        errors: [],
+      });
+    }
+  }
 
-  verifyRefreshToken(refreshToken: string): void {}
+  async verifyRefreshToken(refreshToken: string): Promise<IJwtPayload> {
+    try {
+      return await this.jwtService.verifyAsync<IJwtPayload>(refreshToken, {
+        secret: process.env.REFRESH_SECRET_KEY,
+      });
+    } catch (_) {
+      throw new UnauthorizedException({
+        message: 'User is unauthorized!',
+        errors: [],
+      });
+    }
+  }
 }

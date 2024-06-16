@@ -5,5 +5,7 @@ export { LogoutUseCase } from './use-cases/logout.use-case';
 export { IRegisterInput } from './model/IRegisterInput';
 export { ILoginInput } from './model/ILoginInput';
 export { RegisterUseCaseInputDto } from './dto/registerUseCaseInput.dto';
+export { RefreshUseCaseInputDto } from './dto/refreshUseCaseInput.dto';
 export { LoginUseCaseInputDto } from './dto/loginUseCaseInput.dto';
 export { SaveTokenRepositoryDto } from './dto/saveTokenRepository.dto';
+export { ChangeTokenRepositoryInputDto } from './dto/changeTokenRepositoryInput.dto';

@@ -1,21 +1,24 @@
 import { IAuthController } from './IAuthController';
-import { Body, Controller, Next, Post, Res } from '@nestjs/common';
+import { Body, Controller, Next, Post, Req, Res } from '@nestjs/common';
 import {
   ILoginInput,
   IRegisterInput,
   LoginUseCase,
   LoginUseCaseInputDto,
+  RefreshUseCase,
+  RefreshUseCaseInputDto,
   RegisterUseCase,
   RegisterUseCaseInputDto,
 } from '@application/auth';
 import { concat, delay, from, map } from 'rxjs';
-import { NextFunction, Response } from 'express';
+import { NextFunction, Response, Request } from 'express';
 
 @Controller('auth')
 export class AuthController implements IAuthController {
   constructor(
     private loginUseCase: LoginUseCase,
     private registerUseCase: RegisterUseCase,
+    private refreshUseCase: RefreshUseCase,
   ) {}
   @Post('login')
   async login(
@@ -46,8 +49,28 @@ export class AuthController implements IAuthController {
   }
 
   @Post('refresh')
-  async refresh() {
-    from('refresh');
+  async refresh(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Next() next: NextFunction,
+  ) {
+    try {
+      const refreshToken = req.cookies.refreshToken;
+      const refreshUseCase = await this.refreshUseCase.execute(
+        new RefreshUseCaseInputDto(refreshToken),
+      );
+      res.cookie('refreshToken', refreshUseCase.refreshToken, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 30,
+      });
+      res.json({
+        message: refreshUseCase.message,
+        access: refreshUseCase.access,
+      });
+    } catch (e) {
+      console.log(e);
+      next(e);
+    }
   }
 
   @Post('register')

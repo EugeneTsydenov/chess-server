@@ -28,7 +28,21 @@ export class UserRepository implements IUserRepository {
     }
   }
 
-  getUserById(id: number): any {}
+  async getUserById(id: number): Promise<UserEntity> {
+    try {
+      const user = await this.db.user.findFirst({
+        where: {
+          id: id,
+        },
+      });
+      return user ? new UserEntity(user) : null;
+    } catch (e) {
+      throw new HttpException(
+        { message: 'Something went wrong!', error: [] },
+        500,
+      );
+    }
+  }
 
   async getUserByUsername(username: string): Promise<UserEntity> {
     try {

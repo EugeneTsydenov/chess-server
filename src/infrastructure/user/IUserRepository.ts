@@ -2,7 +2,7 @@ import { UserEntity } from '@domain/user';
 import { SaveUserRepositoryDto } from '@application/user';
 
 export interface IUserRepository {
-  getUserById(id: number): any;
+  getUserById(id: number): Promise<UserEntity>;
   deleteUser(id: number): any;
   updateUser(id: number): any;
   saveUser(userData: SaveUserRepositoryDto): Promise<UserEntity>;

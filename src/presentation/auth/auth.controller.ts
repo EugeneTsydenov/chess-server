@@ -1,20 +1,16 @@
 import { IAuthController } from './IAuthController';
+import { Body, Controller, Next, Post, Res } from '@nestjs/common';
 import {
-  Body,
-  Controller,
-  HttpException,
-  Next,
-  Post,
-  Res,
-} from '@nestjs/common';
-import {
-  IRegisterUserInput,
+  ILoginInput,
+  IRegisterInput,
   LoginUseCase,
+  LoginUseCaseInputDto,
   RegisterUseCase,
   RegisterUseCaseInputDto,
 } from '@application/auth';
-import { catchError, EMPTY, from } from 'rxjs';
+import { concat, delay, from, map } from 'rxjs';
 import { NextFunction, Response } from 'express';
+
 @Controller('auth')
 export class AuthController implements IAuthController {
   constructor(
@@ -22,37 +18,51 @@ export class AuthController implements IAuthController {
     private registerUseCase: RegisterUseCase,
   ) {}
   @Post('login')
-  login(@Body() userData: any) {
-    return this.loginUseCase.execute();
+  async login(
+    @Body() body: ILoginInput,
+    @Res() res: Response,
+    @Next() next: NextFunction,
+  ) {
+    try {
+      const transformedBody = new LoginUseCaseInputDto(body);
+      const loginUseCase = await this.loginUseCase.execute(transformedBody);
+      res.cookie('refreshToken', loginUseCase.refreshToken, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 30,
+      });
+      res.json({ message: loginUseCase.message, access: loginUseCase.access });
+    } catch (e) {
+      next(e);
+    }
   }
 
   @Post('logout')
-  logout(userData: any) {
-    return from('logout');
+  async logout(userData: any) {
+    concat(from('1').pipe(delay(1000)), from('2'), from('3')).pipe(
+      map((r) => {
+        console.log(r);
+      }),
+    );
   }
 
   @Post('refresh')
-  refresh() {
-    return from('refresh');
+  async refresh() {
+    from('refresh');
   }
 
   @Post('register')
-  register(
-    @Body() userInput: IRegisterUserInput,
+  async register(
+    @Body() body: IRegisterInput,
     @Res() res: Response,
     @Next() next: NextFunction,
-  ): any {
-    const transformedUserInput = new RegisterUseCaseInputDto(userInput);
-    this.registerUseCase
-      .execute(transformedUserInput)
-      .pipe(
-        catchError((err) => {
-          next(err);
-          return EMPTY;
-        }),
-      )
-      .subscribe((r) => {
-        res.json(r);
-      });
+  ): Promise<void> {
+    try {
+      const transformedBody = new RegisterUseCaseInputDto(body);
+      const registerUseCase =
+        await this.registerUseCase.execute(transformedBody);
+      res.json(registerUseCase);
+    } catch (e) {
+      next(e);
+    }
   }
 }

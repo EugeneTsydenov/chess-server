@@ -2,10 +2,21 @@ import { AuthController } from './auth.controller';
 import { Module } from '@nestjs/common';
 import { LoginUseCase, RegisterUseCase } from '@application/auth';
 import { UserRepository } from '@infrastructure/user';
+import { JwtService } from '@nestjs/jwt';
 import { Database } from '@frameworks/database';
+import { TokenService } from '@common/services';
+import { AuthRepository } from '@infrastructure/auth';
 
 @Module({
   controllers: [AuthController],
-  providers: [LoginUseCase, UserRepository, Database, RegisterUseCase],
+  providers: [
+    LoginUseCase,
+    RegisterUseCase,
+    UserRepository,
+    JwtService,
+    TokenService,
+    Database,
+    AuthRepository,
+  ],
 })
 export class AuthModule {}

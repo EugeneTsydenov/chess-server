@@ -1,5 +1,8 @@
+import { SaveTokenRepositoryDto } from '@application/auth';
+import { AuthEntity } from '@domain/auth';
+
 export interface IAuthRepository {
-  save(): any;
+  save(input: SaveTokenRepositoryDto): Promise<AuthEntity>;
   get(): any;
   delete(): any;
 }

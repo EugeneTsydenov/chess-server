@@ -27,7 +27,7 @@ model User {
   created_at   DateTime @default(now()) @db.Timestamptz(6)
   updated_at   DateTime @db.Timestamptz(6)
   draws        Int      @default(0)
-  Token        Token?
+  Token        Token[]
 
   @@map(name: "users")
 }
@@ -48,7 +48,7 @@ model Token {
   id      Int    @id @default(autoincrement())
   jti     String
   user_id Int    @unique
-  user    User   @relation(fields: [user_id], references: [id])
+  user    User?  @relation(fields: [user_id], references: [id])
 
   @@map(name: "tokens")
 }

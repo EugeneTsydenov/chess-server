@@ -1,4 +1,4 @@
-import { IRegisterUserInput } from '@application/auth';
+import { IRegisterInput } from '@application/auth';
 
 export class RegisterUseCaseInputDto {
   username: string;
@@ -6,7 +6,7 @@ export class RegisterUseCaseInputDto {
   email: string;
   displayName: string;
 
-  constructor(input: IRegisterUserInput) {
+  constructor(input: IRegisterInput) {
     this.username = input.username;
     this.password = input.password;
     this.email = input.email;

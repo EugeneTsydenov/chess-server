@@ -5,14 +5,14 @@ CREATE TABLE "users" (
     "password" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "display_name" TEXT NOT NULL,
-    "games" INTEGER NOT NULL,
-    "avatar" TEXT NOT NULL,
-    "rating" INTEGER NOT NULL,
-    "wins" INTEGER NOT NULL,
-    "losses" INTEGER NOT NULL,
+    "games" INTEGER NOT NULL DEFAULT 0,
+    "avatar" TEXT NOT NULL DEFAULT 'https://i.ibb.co/LR40jQH/def-avatar.png',
+    "rating" INTEGER NOT NULL DEFAULT 0,
+    "wins" INTEGER NOT NULL DEFAULT 0,
+    "losses" INTEGER NOT NULL DEFAULT 0,
     "created_at" TIMESTAMPTZ(6) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMPTZ(6) NOT NULL,
-    "draws" INTEGER NOT NULL,
+    "draws" INTEGER NOT NULL DEFAULT 0,
 
     CONSTRAINT "users_pkey" PRIMARY KEY ("id")
 );

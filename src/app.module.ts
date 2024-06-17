@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import env from '@common/config/env';
 import { ConfigModule } from '@nestjs/config';
-import { AuthModule } from '@presentation/auth';
-import { UserModule } from '@presentation/user';
-import { GameModule } from '@presentation/game';
+import { AuthModule } from '@src/auth';
+import { UserModule } from '@src/user';
+import { GameModule } from '@src/game';
 
 @Module({
   imports: [

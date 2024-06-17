@@ -18,10 +18,7 @@
     "forceConsistentCasingInFileNames": false,
     "paths": {
       "@src/*": ["src/*"],
-      "@application/*": ["src/application/*"],
-      "@domain/*": ["src/domain/*"],
-      "@presentation/*": ["src/presentation/*"],
-      "@infrastructure/*": ["src/infrastructure/*"],
+      "@auth/*": ["src/auth/*"],
       "@frameworks/*": ["src/frameworks/*"],
       "@common/*": ["src/common/*"],
     },

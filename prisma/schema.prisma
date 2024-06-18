@@ -52,3 +52,10 @@ model Token {
 
   @@map(name: "tokens")
 }
+
+model InvalidToken {
+  id  Int    @id @default(autoincrement())
+  jti String
+
+  @@map(name: "invalid_tokens")
+}

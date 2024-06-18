@@ -9,6 +9,7 @@ import { AuthRepository } from './auth.repository';
 import { RefreshUseCase } from './use-cases/refresh.use-case';
 import { UserRepository } from '@src/user';
 import { AuthMiddleware } from './middlewares/auth.middleware';
+import { LogoutUseCase } from '@auth/use-cases/logout.use-case';
 
 @Module({
   controllers: [AuthController],
@@ -22,6 +23,7 @@ import { AuthMiddleware } from './middlewares/auth.middleware';
     AuthRepository,
     RefreshUseCase,
     AuthMiddleware,
+    LogoutUseCase,
   ],
 })
 export class AuthModule implements NestModule {

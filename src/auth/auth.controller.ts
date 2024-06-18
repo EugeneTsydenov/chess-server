@@ -9,7 +9,7 @@ import { LoginUseCaseInputDto } from './dto/loginUseCaseInput.dto';
 import { RefreshUseCaseInputDto } from './dto/refreshUseCaseInput.dto';
 import { IRegisterInput } from './models/IRegisterInput';
 import { RegisterUseCaseInputDto } from './dto/registerUseCaseInput.dto';
-import { ILogoutInput } from '@auth/models/ILogoutInput';
+import { LogoutUseCase } from './use-cases/logout.use-case';
 
 @Controller('auth')
 export class AuthController implements IAuthController {
@@ -17,6 +17,7 @@ export class AuthController implements IAuthController {
     private loginUseCase: LoginUseCase,
     private registerUseCase: RegisterUseCase,
     private refreshUseCase: RefreshUseCase,
+    private logoutUseCase: LogoutUseCase,
   ) {}
   @Post('login')
   async login(
@@ -39,12 +40,16 @@ export class AuthController implements IAuthController {
 
   @Post('logout')
   async logout(
-    @Body() body: ILogoutInput,
+    @Req() req: Request,
     @Res() res: Response,
     @Next() next: NextFunction,
   ) {
     try {
-      res.json(body);
+      const accessToken = req.headers.authorization.split(' ')[1];
+      const refreshToken: string = req.cookies.refreshToken;
+      await this.logoutUseCase.execute({ accessToken, refreshToken });
+      res.cookie('refreshToken', null);
+      res.json({ message: 'Logout success!' });
     } catch (e) {
       next(e);
     }

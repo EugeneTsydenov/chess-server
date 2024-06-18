@@ -2,8 +2,9 @@ import { IJwtPayload } from '../models/IJwtPayload';
 
 export interface ITokenService {
   generatePairOfTokens(id: number): Promise<IPairOfTokens>;
-  verifyRefreshToken(refreshToken: string): Promise<IJwtPayload>;
-  verifyAccessToken(accessToken: string): Promise<IJwtPayload>;
+  verifyRefreshToken(refreshToken: string): IJwtPayload;
+  verifyAccessToken(accessToken: string): IJwtPayload;
+  parseToken(token: string): IJwtPayload;
 }
 
 export interface IToken {

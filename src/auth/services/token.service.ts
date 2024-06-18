@@ -34,7 +34,7 @@ export class TokenService implements ITokenService {
       const refreshOptions: JwtSignOptions = {
         privateKey: process.env.REFRESH_SECRET_KEY,
         jwtid: refreshJti,
-        expiresIn: '15m',
+        expiresIn: '30d',
       };
       const refreshToken = await this.jwtService.signAsync(
         payload,
@@ -46,7 +46,6 @@ export class TokenService implements ITokenService {
         refresh: { token: refreshToken, jti: refreshJti },
       };
     } catch (err) {
-      console.log(err);
       throw new HttpException(
         { message: 'Something went wrong!', errors: [] },
         500,
@@ -54,9 +53,9 @@ export class TokenService implements ITokenService {
     }
   }
 
-  async verifyAccessToken(accessToken: string): Promise<IJwtPayload> {
+  verifyAccessToken(accessToken: string): IJwtPayload {
     try {
-      return await this.jwtService.verifyAsync<IJwtPayload>(accessToken, {
+      return this.jwtService.verify<IJwtPayload>(accessToken, {
         secret: process.env.ACCESS_SECRET_KEY,
       });
     } catch (_) {
@@ -67,9 +66,9 @@ export class TokenService implements ITokenService {
     }
   }
 
-  async verifyRefreshToken(refreshToken: string): Promise<IJwtPayload> {
+  verifyRefreshToken(refreshToken: string): IJwtPayload {
     try {
-      return await this.jwtService.verifyAsync<IJwtPayload>(refreshToken, {
+      return this.jwtService.verify<IJwtPayload>(refreshToken, {
         secret: process.env.REFRESH_SECRET_KEY,
       });
     } catch (_) {
@@ -78,5 +77,9 @@ export class TokenService implements ITokenService {
         errors: [],
       });
     }
+  }
+
+  parseToken(token: string): IJwtPayload {
+    return this.jwtService.decode(token);
   }
 }

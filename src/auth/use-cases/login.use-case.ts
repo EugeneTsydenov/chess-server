@@ -43,6 +43,12 @@ export class LoginUseCase
       user.id,
     );
 
+    const token = await this.authRepository.getTokenByUserId(user.id);
+
+    if (token) {
+      await this.authRepository.deleteByUserId(user.id);
+    }
+
     await this.authRepository.save(
       new SaveTokenRepositoryDto({ jti: refresh.jti, userId: user.id }),
     );

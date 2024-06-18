@@ -1,6 +1,5 @@
 import { IAuthController } from './interfaces/IAuthController';
 import { Body, Controller, Next, Post, Req, Res } from '@nestjs/common';
-import { concat, delay, from, map } from 'rxjs';
 import { NextFunction, Response, Request } from 'express';
 import { LoginUseCase } from './use-cases/login.use-case';
 import { RegisterUseCase } from './use-cases/register.use-case';
@@ -10,6 +9,7 @@ import { LoginUseCaseInputDto } from './dto/loginUseCaseInput.dto';
 import { RefreshUseCaseInputDto } from './dto/refreshUseCaseInput.dto';
 import { IRegisterInput } from './models/IRegisterInput';
 import { RegisterUseCaseInputDto } from './dto/registerUseCaseInput.dto';
+import { ILogoutInput } from '@auth/models/ILogoutInput';
 
 @Controller('auth')
 export class AuthController implements IAuthController {
@@ -38,12 +38,16 @@ export class AuthController implements IAuthController {
   }
 
   @Post('logout')
-  async logout(userData: any) {
-    concat(from('1').pipe(delay(1000)), from('2'), from('3')).pipe(
-      map((r) => {
-        console.log(r);
-      }),
-    );
+  async logout(
+    @Body() body: ILogoutInput,
+    @Res() res: Response,
+    @Next() next: NextFunction,
+  ) {
+    try {
+      res.json(body);
+    } catch (e) {
+      next(e);
+    }
   }
 
   @Post('refresh')
@@ -54,8 +58,9 @@ export class AuthController implements IAuthController {
   ) {
     try {
       const refreshToken = req.cookies.refreshToken;
+      const accessToken = req.headers.authorization.split(' ')[1];
       const refreshUseCase = await this.refreshUseCase.execute(
-        new RefreshUseCaseInputDto(refreshToken),
+        new RefreshUseCaseInputDto(refreshToken, accessToken),
       );
       res.cookie('refreshToken', refreshUseCase.refreshToken, {
         httpOnly: true,
@@ -64,9 +69,9 @@ export class AuthController implements IAuthController {
       res.json({
         message: refreshUseCase.message,
         access: refreshUseCase.access,
+        refresh: refreshUseCase.refreshToken,
       });
     } catch (e) {
-      console.log(e);
       next(e);
     }
   }

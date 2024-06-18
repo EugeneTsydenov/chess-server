@@ -4,8 +4,8 @@ import { TokenService } from '../services/token.service';
 import { RefreshUseCaseInputDto } from '../dto/refreshUseCaseInput.dto';
 import { RefreshUseCaseOutputDto } from '../dto/refreshUseCaseOutput.dto';
 import { AuthRepository } from '../auth.repository';
-import { ChangeTokenRepositoryInputDto } from '../dto/changeTokenRepositoryInput.dto';
 import { UserRepository } from '@src/user';
+import { SaveTokenRepositoryDto } from '../dto/saveTokenRepository.dto';
 
 @Injectable()
 export class RefreshUseCase
@@ -27,9 +27,7 @@ export class RefreshUseCase
       });
     }
 
-    const payload = await this.tokenService.verifyRefreshToken(
-      input.refreshToken,
-    );
+    const payload = this.tokenService.verifyRefreshToken(input.refreshToken);
 
     const user = await this.userRepository.getUserById(payload.id);
 
@@ -56,14 +54,37 @@ export class RefreshUseCase
       });
     }
 
+    const invalidToken = await this.authRepository.getInvalidToken(token.jti);
+
+    if (invalidToken) {
+      throw new UnauthorizedException({
+        message: 'User is unauthorized!',
+        errors: [],
+      });
+    }
+
+    await this.authRepository.deleteByUserId(token.userId);
+
+    await this.authRepository.saveInvalidToken(token.jti);
+
+    const parsedAccessToken = this.tokenService.parseToken(input.accessToken);
+
+    const invalidAccessToken = await this.authRepository.getInvalidToken(
+      parsedAccessToken.jti,
+    );
+
+    if (!invalidAccessToken) {
+      await this.authRepository.saveInvalidToken(parsedAccessToken.jti);
+    }
+
     const { access, refresh } = await this.tokenService.generatePairOfTokens(
       user.id,
     );
 
-    await this.authRepository.changeToken(
-      new ChangeTokenRepositoryInputDto({
+    await this.authRepository.save(
+      new SaveTokenRepositoryDto({
         userId: user.id,
-        newJti: refresh.jti,
+        jti: refresh.jti,
       }),
     );
 

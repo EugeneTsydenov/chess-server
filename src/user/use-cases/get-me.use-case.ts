@@ -8,14 +8,15 @@ import { UserRepository } from '../user.repository';
 export class GetMeUseCase
   implements UseCase<GetMeUseCaseInputDto, GetMeUseCaseOutputDto>
 {
-  constructor() {}
+  constructor(private userRepository: UserRepository) {}
 
-  async execute(input: GetMeUseCaseInputDto): Promise<any> {
-    // const user = await this.userRepository.getUserById(input.userId);
-    // if (!user) {
-    //   throw new NotFoundException({ message: 'User not found!' });
-    // }
-    //
-    // return new GetMeUseCaseOutputDto(user);
+  async execute(input: GetMeUseCaseInputDto): Promise<GetMeUseCaseOutputDto> {
+    const user = await this.userRepository.getUserById(input.userId);
+
+    if (!user) {
+      throw new NotFoundException({ message: 'User not found!' });
+    }
+
+    return new GetMeUseCaseOutputDto(user);
   }
 }

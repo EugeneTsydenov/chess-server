@@ -18,7 +18,7 @@ export class UserController implements IUserController {
       const getMeUseCase = await this.getMeUseCase.execute(
         new GetMeUseCaseInputDto(body.userId),
       );
-      res.json({ getMeUseCase });
+      res.json(getMeUseCase);
     } catch (e) {
       next(e);
     }

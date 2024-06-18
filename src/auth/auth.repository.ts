@@ -2,8 +2,8 @@ import { Database } from '@frameworks/database';
 import { HttpException, Injectable } from '@nestjs/common';
 import { IAuthRepository } from './interfaces/IAuthRepository';
 import { AuthEntity } from './entities/auth.entity';
-import { SaveTokenRepositoryDto } from './dto/saveTokenRepository.dto';
-import { ChangeTokenRepositoryInputDto } from './dto/changeTokenRepositoryInput.dto';
+import { SaveTokenRepositoryDto } from './dto/save-token-repository.dto';
+import { ChangeTokenRepositoryInputDto } from './dto/change-token-repository-input.dto';
 import { IInvalidToken } from './models/IInvalidToken';
 
 @Injectable()

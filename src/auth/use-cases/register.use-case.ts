@@ -1,8 +1,8 @@
 import { UseCase } from '@common/types';
 import { HttpException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { RegisterUseCaseOutputDto } from '../dto/registerUseCaseOutput.dto';
-import { RegisterUseCaseInputDto } from '../dto/registerUseCaseInput.dto';
+import { RegisterUseCaseOutputDto } from '../dto/register-use-case-output.dto';
+import { RegisterUseCaseInputDto } from '../dto/register-use-case-input.dto';
 import { SaveUserRepositoryDto } from '@src/user';
 import { UserRepository } from '@src/user';
 

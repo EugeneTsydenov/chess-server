@@ -1,6 +1,6 @@
-import { SaveTokenRepositoryDto } from '../dto/saveTokenRepository.dto';
+import { SaveTokenRepositoryDto } from '../dto/save-token-repository.dto';
 import { AuthEntity } from '../entities/auth.entity';
-import { ChangeTokenRepositoryInputDto } from '../dto/changeTokenRepositoryInput.dto';
+import { ChangeTokenRepositoryInputDto } from '../dto/change-token-repository-input.dto';
 import { IInvalidToken } from '../models/IInvalidToken';
 
 export interface IAuthRepository {

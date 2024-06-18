@@ -1,11 +1,11 @@
 import { UseCase } from '@common/types';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { TokenService } from '../services/token.service';
-import { RefreshUseCaseInputDto } from '../dto/refreshUseCaseInput.dto';
-import { RefreshUseCaseOutputDto } from '../dto/refreshUseCaseOutput.dto';
+import { RefreshUseCaseInputDto } from '../dto/refresh-use-case-input.dto';
+import { RefreshUseCaseOutputDto } from '../dto/refresh-use-case-output.dto';
 import { AuthRepository } from '../auth.repository';
 import { UserRepository } from '@src/user';
-import { SaveTokenRepositoryDto } from '../dto/saveTokenRepository.dto';
+import { SaveTokenRepositoryDto } from '../dto/save-token-repository.dto';
 
 @Injectable()
 export class RefreshUseCase

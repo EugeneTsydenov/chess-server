@@ -5,10 +5,10 @@ import { LoginUseCase } from './use-cases/login.use-case';
 import { RegisterUseCase } from './use-cases/register.use-case';
 import { RefreshUseCase } from './use-cases/refresh.use-case';
 import { ILoginInput } from './models/ILoginInput';
-import { LoginUseCaseInputDto } from './dto/loginUseCaseInput.dto';
-import { RefreshUseCaseInputDto } from './dto/refreshUseCaseInput.dto';
+import { LoginUseCaseInputDto } from './dto/login-use-case-input.dto';
+import { RefreshUseCaseInputDto } from './dto/refresh-use-case-input.dto';
 import { IRegisterInput } from './models/IRegisterInput';
-import { RegisterUseCaseInputDto } from './dto/registerUseCaseInput.dto';
+import { RegisterUseCaseInputDto } from './dto/register-use-case-input.dto';
 import { LogoutUseCase } from './use-cases/logout.use-case';
 
 @Controller('auth')

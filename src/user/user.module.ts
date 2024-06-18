@@ -7,6 +7,7 @@ import { AuthMiddleware } from '@src/auth';
 import { TokenService } from '@auth/services/token.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthRepository } from '@auth/auth.repository';
+import { GetUserByIdUseCase } from './use-cases/get-user-by-id.use-case';
 
 @Module({
   controllers: [UserController],
@@ -17,6 +18,7 @@ import { AuthRepository } from '@auth/auth.repository';
     TokenService,
     JwtService,
     AuthRepository,
+    GetUserByIdUseCase,
   ],
 })
 export class UserModule implements NestModule {

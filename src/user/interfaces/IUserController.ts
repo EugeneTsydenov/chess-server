@@ -6,7 +6,7 @@ export interface IUserController {
     res: Response,
     next: NextFunction,
   ): Promise<void>;
-  getUser(): any;
+  getUserById(id: number, res: Response, next: NextFunction): Promise<void>;
   updateMe(): any;
   deleteMe(): any;
 }

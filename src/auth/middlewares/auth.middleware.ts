@@ -64,7 +64,7 @@ export class AuthMiddleware implements NestMiddleware {
         );
       }
 
-      req.body = { userId: payload.id };
+      req.body = { ...req.body, userId: payload.id };
       next();
     } catch (e) {
       next(e);

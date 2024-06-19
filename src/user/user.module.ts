@@ -8,6 +8,7 @@ import { TokenService } from '@auth/services/token.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthRepository } from '@auth/auth.repository';
 import { GetUserByIdUseCase } from './use-cases/get-user-by-id.use-case';
+import { UpdateMeUseCase } from './use-cases/update-me.use-case';
 
 @Module({
   controllers: [UserController],
@@ -19,6 +20,7 @@ import { GetUserByIdUseCase } from './use-cases/get-user-by-id.use-case';
     JwtService,
     AuthRepository,
     GetUserByIdUseCase,
+    UpdateMeUseCase,
   ],
 })
 export class UserModule implements NestModule {

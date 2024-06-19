@@ -1,4 +1,5 @@
 import { NextFunction, Response } from 'express';
+import { IUpdatedMeBody } from '../models/IUpdatedMeBody';
 
 export interface IUserController {
   getMe(
@@ -7,6 +8,10 @@ export interface IUserController {
     next: NextFunction,
   ): Promise<void>;
   getUserById(id: number, res: Response, next: NextFunction): Promise<void>;
-  updateMe(): any;
+  updateMe(
+    body: IUpdatedMeBody,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void>;
   deleteMe(): any;
 }

@@ -5,7 +5,6 @@ import { RefreshUseCaseInputDto } from '../dto/refresh-use-case-input.dto';
 import { RefreshUseCaseOutputDto } from '../dto/refresh-use-case-output.dto';
 import { AuthRepository } from '../auth.repository';
 import { UserRepository } from '@src/user';
-import { SaveTokenRepositoryDto } from '../dto/save-token-repository.dto';
 
 @Injectable()
 export class RefreshUseCase
@@ -63,10 +62,6 @@ export class RefreshUseCase
       });
     }
 
-    await this.authRepository.deleteByUserId(token.userId);
-
-    await this.authRepository.saveInvalidToken(token.jti);
-
     const parsedAccessToken = this.tokenService.parseToken(input.accessToken);
 
     const invalidAccessToken = await this.authRepository.getInvalidToken(
@@ -77,20 +72,11 @@ export class RefreshUseCase
       await this.authRepository.saveInvalidToken(parsedAccessToken.jti);
     }
 
-    const { access, refresh } = await this.tokenService.generatePairOfTokens(
-      user.id,
-    );
-
-    await this.authRepository.save(
-      new SaveTokenRepositoryDto({
-        userId: user.id,
-        jti: refresh.jti,
-      }),
-    );
+    const access = this.tokenService.generateAccessToken(user.id);
 
     return new RefreshUseCaseOutputDto({
       message: 'Successfully refreshed!',
-      refreshToken: refresh.token,
+      refreshToken: input.refreshToken,
       access: {
         token: access.token,
         tokenType: 'Bearer',

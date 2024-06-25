@@ -3,55 +3,13 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { IPairOfTokens, ITokenService } from '../interfaces/ITokenService';
-import { JwtService, JwtSignOptions } from '@nestjs/jwt';
+import { IToken, ITokenService } from '../interfaces/ITokenService';
+import { JwtService } from '@nestjs/jwt';
 import { v4 as uuidv4 } from 'uuid';
-import * as process from 'node:process';
 import { IJwtPayload } from '../models/IJwtPayload';
-
 @Injectable()
 export class TokenService implements ITokenService {
   constructor(private jwtService: JwtService) {}
-
-  async generatePairOfTokens(id: number): Promise<IPairOfTokens> {
-    try {
-      const payload = {
-        id,
-      };
-
-      const accessJti = uuidv4();
-      const accessOptions: JwtSignOptions = {
-        privateKey: process.env.ACCESS_SECRET_KEY,
-        jwtid: accessJti,
-        expiresIn: '15m',
-      };
-      const accessToken = await this.jwtService.signAsync(
-        payload,
-        accessOptions,
-      );
-
-      const refreshJti = uuidv4();
-      const refreshOptions: JwtSignOptions = {
-        privateKey: process.env.REFRESH_SECRET_KEY,
-        jwtid: refreshJti,
-        expiresIn: '30d',
-      };
-      const refreshToken = await this.jwtService.signAsync(
-        payload,
-        refreshOptions,
-      );
-
-      return {
-        access: { token: accessToken, jti: accessJti },
-        refresh: { token: refreshToken, jti: refreshJti },
-      };
-    } catch (err) {
-      throw new HttpException(
-        { message: 'Something went wrong!', errors: [] },
-        500,
-      );
-    }
-  }
 
   verifyAccessToken(accessToken: string): IJwtPayload {
     try {
@@ -81,5 +39,60 @@ export class TokenService implements ITokenService {
 
   parseToken(token: string): IJwtPayload {
     return this.jwtService.decode(token);
+  }
+
+  generateAccessToken(id: number): IToken {
+    try {
+      const jti = uuidv4();
+      return {
+        token: this.jwtService.sign(
+          { id },
+          {
+            privateKey: process.env.ACCESS_SECRET_KEY,
+            jwtid: jti,
+            expiresIn: '15m',
+          },
+        ),
+        jti: jti,
+      };
+    } catch (err) {
+      throw new HttpException(
+        { message: 'Something went wrong!', errors: [] },
+        500,
+      );
+    }
+  }
+
+  generateRefreshToken(id: number, rememberMe: boolean): IToken {
+    try {
+      const jti = uuidv4();
+      return rememberMe
+        ? {
+            token: this.jwtService.sign(
+              { id },
+              {
+                privateKey: process.env.REFRESH_SECRET_KEY,
+                jwtid: jti,
+              },
+            ),
+            jti: jti,
+          }
+        : {
+            token: this.jwtService.sign(
+              { id },
+              {
+                privateKey: process.env.REFRESH_SECRET_KEY,
+                jwtid: jti,
+                expiresIn: '30d',
+              },
+            ),
+            jti: jti,
+          };
+    } catch (err) {
+      throw new HttpException(
+        { message: 'Something went wrong!', errors: [] },
+        500,
+      );
+    }
   }
 }

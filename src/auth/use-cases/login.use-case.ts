@@ -39,8 +39,10 @@ export class LoginUseCase
       );
     }
 
-    const { access, refresh } = await this.tokenService.generatePairOfTokens(
+    const access = this.tokenService.generateAccessToken(user.id);
+    const refresh = this.tokenService.generateRefreshToken(
       user.id,
+      userInput.rememberMe,
     );
 
     const token = await this.authRepository.getTokenByUserId(user.id);

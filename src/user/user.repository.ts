@@ -44,11 +44,14 @@ export class UserRepository implements IUserRepository {
     }
   }
 
-  async getUserByUsername(username: string): Promise<UserEntity> {
+  async getUserByField(
+    field: 'id' | 'username' | 'email' | 'display_name',
+    value: string,
+  ): Promise<UserEntity> {
     try {
       const user = await this.db.user.findFirst({
         where: {
-          username: username,
+          [field]: value,
         },
       });
       return user ? new UserEntity(user) : null;

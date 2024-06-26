@@ -15,11 +15,36 @@ export class RegisterUseCase
   async execute(
     userInput: RegisterUseCaseInputDto,
   ): Promise<RegisterUseCaseOutputDto> {
-    const user = await this.userRepository.getUserByUsername(
+    const isUsernameExist = await this.userRepository.getUserByField(
+      'username',
       userInput.username,
     );
 
-    if (user) {
+    if (isUsernameExist) {
+      throw new HttpException(
+        { message: 'User with the same username already exists!', errors: [] },
+        409,
+      );
+    }
+
+    const isDisplayNameExist = await this.userRepository.getUserByField(
+      'display_name',
+      userInput.displayName,
+    );
+
+    if (isDisplayNameExist) {
+      throw new HttpException(
+        { message: 'User already exists!', errors: [] },
+        409,
+      );
+    }
+
+    const isEmailExist = await this.userRepository.getUserByField(
+      'email',
+      userInput.email,
+    );
+
+    if (isEmailExist) {
       throw new HttpException(
         { message: 'User already exists!', errors: [] },
         409,

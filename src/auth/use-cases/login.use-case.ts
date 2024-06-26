@@ -18,7 +18,8 @@ export class LoginUseCase
     private authRepository: AuthRepository,
   ) {}
   async execute(userInput: LoginUseCaseInputDto) {
-    const user = await this.userRepository.getUserByUsername(
+    const user = await this.userRepository.getUserByField(
+      'username',
       userInput.username,
     );
 
@@ -61,7 +62,7 @@ export class LoginUseCase
         tokenType: 'Bearer',
       },
       refreshToken: refresh.token,
-      message: 'User successfully login!',
+      message: 'You have successfully entered the system!',
     });
   }
 }

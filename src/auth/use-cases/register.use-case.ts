@@ -15,16 +15,18 @@ export class RegisterUseCase
   async execute(
     userInput: RegisterUseCaseInputDto,
   ): Promise<RegisterUseCaseOutputDto> {
+    const errors: { field: string; message: string }[] = [];
+
     const isUsernameExist = await this.userRepository.getUserByField(
       'username',
       userInput.username,
     );
 
     if (isUsernameExist) {
-      throw new HttpException(
-        { message: 'User with the same username already exists!', errors: [] },
-        409,
-      );
+      errors.push({
+        message: 'User with this username already exists!',
+        field: 'username',
+      });
     }
 
     const isDisplayNameExist = await this.userRepository.getUserByField(
@@ -33,10 +35,10 @@ export class RegisterUseCase
     );
 
     if (isDisplayNameExist) {
-      throw new HttpException(
-        { message: 'User already exists!', errors: [] },
-        409,
-      );
+      errors.push({
+        message: 'User with this display name already exists!',
+        field: 'displayName',
+      });
     }
 
     const isEmailExist = await this.userRepository.getUserByField(
@@ -45,10 +47,14 @@ export class RegisterUseCase
     );
 
     if (isEmailExist) {
-      throw new HttpException(
-        { message: 'User already exists!', errors: [] },
-        409,
-      );
+      errors.push({
+        message: 'User with this email already exists!',
+        field: 'email',
+      });
+    }
+
+    if (errors.length > 0) {
+      throw new HttpException({ message: 'User already exist!', errors }, 409);
     }
 
     const hashedPassword = await bcrypt.hash(userInput.password, 10);
@@ -62,6 +68,8 @@ export class RegisterUseCase
       }),
     );
 
-    return new RegisterUseCaseOutputDto('User successfully registered!');
+    return new RegisterUseCaseOutputDto(
+      'You are successfully registered in the system!',
+    );
   }
 }

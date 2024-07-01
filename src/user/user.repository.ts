@@ -20,6 +20,7 @@ export class UserRepository implements IUserRepository {
       });
       return new UserEntity(user);
     } catch (e) {
+      console.log(e);
       throw new HttpException(
         { message: 'Something went wrong!', error: [] },
         500,

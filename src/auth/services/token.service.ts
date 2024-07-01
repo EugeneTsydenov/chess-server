@@ -66,29 +66,20 @@ export class TokenService implements ITokenService {
   generateRefreshToken(id: number, rememberMe: boolean): IToken {
     try {
       const jti = uuidv4();
-      return rememberMe
-        ? {
-            token: this.jwtService.sign(
-              { id },
-              {
-                privateKey: process.env.REFRESH_SECRET_KEY,
-                jwtid: jti,
-              },
-            ),
-            jti: jti,
-          }
-        : {
-            token: this.jwtService.sign(
-              { id },
-              {
-                privateKey: process.env.REFRESH_SECRET_KEY,
-                jwtid: jti,
-                expiresIn: '30d',
-              },
-            ),
-            jti: jti,
-          };
+
+      return {
+        token: this.jwtService.sign(
+          { id },
+          {
+            privateKey: process.env.REFRESH_SECRET_KEY,
+            jwtid: jti,
+            expiresIn: rememberMe ? '30d' : '1d',
+          },
+        ),
+        jti: jti,
+      };
     } catch (err) {
+      console.log(err);
       throw new HttpException(
         { message: 'Something went wrong!', errors: [] },
         500,

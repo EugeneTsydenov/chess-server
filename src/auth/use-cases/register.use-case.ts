@@ -5,6 +5,7 @@ import { RegisterUseCaseOutputDto } from '../dto/register-use-case-output.dto';
 import { RegisterUseCaseInputDto } from '../dto/register-use-case-input.dto';
 import { SaveUserRepositoryDto } from '@src/user';
 import { UserRepository } from '@src/user';
+import ColorHash from 'color-hash-ts';
 
 @Injectable()
 export class RegisterUseCase
@@ -59,17 +60,20 @@ export class RegisterUseCase
 
     const hashedPassword = await bcrypt.hash(userInput.password, 10);
 
+    const colorHash = new ColorHash();
+
     await this.userRepository.saveUser(
       new SaveUserRepositoryDto({
         username: userInput.username,
         hashPassword: hashedPassword,
         displayName: userInput.displayName,
         email: userInput.email,
+        avatarBackgroundColor: colorHash.hex(userInput.displayName),
       }),
     );
 
     return new RegisterUseCaseOutputDto(
-      'You are successfully registered in the system!',
+      'You have successfully entered the system! Now log in...',
     );
   }
 }

@@ -62,14 +62,16 @@ export class RefreshUseCase
       });
     }
 
-    const parsedAccessToken = this.tokenService.parseToken(input.accessToken);
+    if (input.accessToken) {
+      const parsedAccessToken = this.tokenService.parseToken(input.accessToken);
 
-    const invalidAccessToken = await this.authRepository.getInvalidToken(
-      parsedAccessToken.jti,
-    );
+      const invalidAccessToken = await this.authRepository.getInvalidToken(
+        parsedAccessToken?.jti,
+      );
 
-    if (!invalidAccessToken) {
-      await this.authRepository.saveInvalidToken(parsedAccessToken.jti);
+      if (!invalidAccessToken) {
+        await this.authRepository.saveInvalidToken(parsedAccessToken.jti);
+      }
     }
 
     const access = this.tokenService.generateAccessToken(user.id);

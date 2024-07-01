@@ -1,5 +1,13 @@
 import { IAuthController } from './interfaces/IAuthController';
-import { Body, Controller, Next, Post, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Next,
+  Post,
+  Req,
+  Res,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { NextFunction, Response, Request } from 'express';
 import { LoginUseCase } from './use-cases/login.use-case';
 import { RegisterUseCase } from './use-cases/register.use-case';
@@ -63,7 +71,8 @@ export class AuthController implements IAuthController {
   ) {
     try {
       const refreshToken = req.cookies.refreshToken;
-      const accessToken = req.headers.authorization.split(' ')[1];
+      console.log(refreshToken);
+      const accessToken = req.headers.authorization?.split(' ')[1];
       const refreshUseCase = await this.refreshUseCase.execute(
         new RefreshUseCaseInputDto(refreshToken, accessToken),
       );
@@ -77,6 +86,9 @@ export class AuthController implements IAuthController {
         refresh: refreshUseCase.refreshToken,
       });
     } catch (e) {
+      if (e instanceof UnauthorizedException) {
+        res.cookie('refreshToken', null);
+      }
       next(e);
     }
   }

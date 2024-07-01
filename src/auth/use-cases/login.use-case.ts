@@ -1,5 +1,9 @@
 import { UseCase } from '@common/types';
-import { HttpException, Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { TokenService } from '../services/token.service';
 import { LoginUseCaseInputDto } from '../dto/login-use-case-input.dto';
@@ -24,20 +28,27 @@ export class LoginUseCase
     );
 
     if (!user) {
-      throw new HttpException(
-        { message: 'A user with this username does not exist!', errors: [] },
-        401,
-      );
+      throw new NotFoundException({
+        message: 'User not found!',
+        errors: [
+          {
+            field: 'username',
+            message: "User with this username doesn't exists!",
+          },
+        ],
+      });
     }
 
     if (!(await bcrypt.compare(userInput.password, user.password))) {
-      throw new HttpException(
-        {
-          message: 'Password is invalid!',
-          errors: [],
-        },
-        401,
-      );
+      throw new UnauthorizedException({
+        message: 'User is unauthorized!',
+        errors: [
+          {
+            field: 'password',
+            message: 'Password is invalid!',
+          },
+        ],
+      });
     }
 
     const access = this.tokenService.generateAccessToken(user.id);

@@ -15,6 +15,7 @@ export class UserEntity implements IUser {
   createdAt: Date;
   displayName: string;
   updatedAt: Date;
+  avatarBackgroundColor: string;
 
   constructor(user: IUserFromDb) {
     this.id = user.id;
@@ -30,5 +31,6 @@ export class UserEntity implements IUser {
     this.createdAt = user.created_at;
     this.updatedAt = user.updated_at;
     this.displayName = user.display_name;
+    this.avatarBackgroundColor = user.avatar_background_color;
   }
 }

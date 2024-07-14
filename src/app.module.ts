@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from '@src/auth';
 import { UserModule } from '@src/user';
 import { GameModule } from '@src/game';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { GameModule } from '@src/game';
     AuthModule,
     UserModule,
     GameModule,
+    CacheModule.register(),
   ],
 })
 export class AppModule {}

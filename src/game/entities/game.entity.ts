@@ -9,4 +9,6 @@ export class GameEntity implements IGame {
   moves: string[];
   whitePlayer: number;
   winner: GameSide;
+  type: 'friend' | 'random';
+  isRating: boolean;
 }

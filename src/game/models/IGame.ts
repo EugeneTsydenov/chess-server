@@ -8,4 +8,6 @@ export interface IGame {
   loser: GameSide;
   moves: string[];
   date: Date;
+  type: 'friend' | 'random';
+  isRating: boolean;
 }

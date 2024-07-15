@@ -6,34 +6,20 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server } from 'socket.io';
-import { IFindGameInput } from '../models/IFindGameInput';
 import { IRandomSocket } from '../interfaces/IRandomSocket';
-import { UseGuards } from '@nestjs/common';
-import { AuthGuard } from '../guards/auth.guard';
 import { FindGameUseCase } from '@src/game/use-cases/find-game.use-case';
-import { FindGameUseCaseInputDto } from '@src/game/dto/find-game-use-case-input.dto';
+import { NotifyUsersUseCase } from '@src/game/use-cases/notify-users.use-case';
+import * as process from 'node:process';
 
 @WebSocketGateway({ cors: process.env.CLIENT_URL })
 export class RandomSocket implements IRandomSocket {
   @WebSocketServer()
   socket: Server;
 
-  constructor(private findGameUseCase: FindGameUseCase) {}
-
-  @UseGuards(AuthGuard)
-  @SubscribeMessage('find_game')
-  async findGame(
-    @MessageBody() body: IFindGameInput,
-    @ConnectedSocket() client: any,
-  ): Promise<void> {
-    const returned = await this.findGameUseCase.execute(
-      new FindGameUseCaseInputDto(body),
-    );
-    client.join(returned.roomId);
-    if (returned.isFindGame) {
-      this.socket.emit('game_found', { roomId: returned.roomId });
-    }
-  }
+  constructor(
+    private findGameUseCase: FindGameUseCase,
+    private notifyUsersUseCase: NotifyUsersUseCase,
+  ) {}
 
   @SubscribeMessage('give_up')
   giveUp(): any {
@@ -48,5 +34,32 @@ export class RandomSocket implements IRandomSocket {
   @SubscribeMessage('offer_draw')
   offerDraw(): any {
     return 'offer_draw';
+  }
+
+  @SubscribeMessage('cancel_search')
+  cancelGameSearch(
+    @MessageBody() body: { userId: number },
+    @ConnectedSocket() client: any,
+  ): void {}
+
+  @SubscribeMessage('notify_users')
+  async notifyUsers(
+    @MessageBody() body: { roomId: string },
+    @ConnectedSocket() client: any,
+  ): Promise<void> {
+    const sockets = await this.notifyUsersUseCase.execute(body);
+    console.log(sockets);
+    this.socket.to(sockets.socketId1).emit('notify', { roomId: body.roomId });
+    this.socket.to(sockets.socketId2).emit('notify', { roomId: body.roomId });
+  }
+
+  @SubscribeMessage('join_room')
+  joinRoom(
+    @MessageBody() body: { roomId: string },
+    @ConnectedSocket() client: any,
+  ): void {
+    console.log('join_room');
+    client.join(body.roomId);
+    this.socket.emit('start_game', { roomId: body.roomId });
   }
 }

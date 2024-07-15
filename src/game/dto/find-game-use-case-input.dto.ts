@@ -15,9 +15,11 @@ export class FindGameUseCaseInputDto {
       | '30 | 0';
   };
   userId: number;
+  socketId: string;
 
   constructor(input: IFindGameInput) {
     this.gameSettings = input.gameSettings;
     this.userId = input.userId;
+    this.socketId = input.socketId;
   }
 }

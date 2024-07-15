@@ -13,4 +13,5 @@ export interface IFindGameInput {
       | '30 | 0';
   };
   userId: number;
+  socketId: string;
 }

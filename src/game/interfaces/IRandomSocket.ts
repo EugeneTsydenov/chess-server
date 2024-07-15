@@ -1,8 +1,8 @@
-import { IFindGameInput } from '../models/IFindGameInput';
-
 export interface IRandomSocket {
-  findGame(body: IFindGameInput, client: any): any;
-  move(): any;
-  offerDraw(): any;
-  giveUp(): any;
+  cancelGameSearch(body: { userId: number }, client: any): void;
+  move(): void;
+  offerDraw(): void;
+  giveUp(): void;
+  notifyUsers(body: { roomId: string }, client: any): void;
+  joinRoom(body: { roomId: string }, client: any): void;
 }

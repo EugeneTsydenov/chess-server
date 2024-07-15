@@ -16,7 +16,10 @@ export class AuthGuard implements CanActivate {
     const accessToken = context.args[0].handshake.auth.accessToken;
 
     if (!accessToken) {
-      client.emit('error', { message: 'User is not authorized!', status: 401 });
+      client.emit('error', {
+        message: 'User is not authorized!',
+        status: 401,
+      });
       return false;
     }
 
@@ -53,7 +56,10 @@ export class AuthGuard implements CanActivate {
 
       return true;
     } catch (e) {
-      client.emit('error', { message: 'User is not authorized!', status: 401 });
+      client.emit('error', {
+        message: 'User is not authorized!',
+        status: 401,
+      });
       return false;
     }
   }

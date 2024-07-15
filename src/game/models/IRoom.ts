@@ -19,4 +19,5 @@ export interface IRoom {
 interface IRoomPlayer {
   id: number;
   side: 'white' | 'black' | null;
+  socketId: string;
 }

@@ -1,9 +1,12 @@
+import { Chess } from 'chess.js';
+
 export interface IRoom {
   roomId: string;
-  fen: string | null;
+  game: Chess | null;
   player1: IRoomPlayer;
   player2: IRoomPlayer | null;
   isRating: boolean;
+  isStartGame: boolean;
   timeMode:
     | '1 | 0'
     | '1 | 1'
@@ -14,6 +17,7 @@ export interface IRoom {
     | '10 | 0'
     | '15 | 10'
     | '30 | 0';
+  watchers: number;
 }
 
 interface IRoomPlayer {

@@ -5,6 +5,7 @@ import { CACHE_MANAGER, Cache } from '@nestjs/cache-manager';
 import { v4 as uuidv4 } from 'uuid';
 import { IRoom } from '../models/IRoom';
 import { FindGameUseCaseOutputDto } from '@src/game/dto/find-game-use-case-output.dto';
+import { Chess } from 'chess.js';
 
 @Injectable()
 export class FindGameUseCase
@@ -25,6 +26,7 @@ export class FindGameUseCase
     input: FindGameUseCaseInputDto,
   ): Promise<FindGameUseCaseOutputDto> {
     let queue = await this.cacheManager.get<IRoom[]>('queue');
+    console.log(queue, 'queue');
     if (!queue) {
       queue = [];
     }
@@ -42,7 +44,8 @@ export class FindGameUseCase
       await this.cacheManager.set(
         room.roomId,
         {
-          fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+          roomId: room.roomId,
+          game: new Chess(),
           player1: {
             id: room.player1.id,
             side: randomValue < 0.5 ? 'black' : 'white',
@@ -55,6 +58,8 @@ export class FindGameUseCase
           },
           isRating: room.isRating,
           timeMode: room.timeMode,
+          isStartGame: true,
+          watchers: 0,
         },
         0,
       );
@@ -70,11 +75,13 @@ export class FindGameUseCase
     const roomId = uuidv4();
     queue.push({
       roomId,
-      fen: null,
+      game: null,
       player1: { id: input.userId, side: null, socketId: input.socketId },
       player2: null,
       isRating: input.gameSettings.isRating,
       timeMode: input.gameSettings.timeTitle,
+      isStartGame: false,
+      watchers: 0,
     });
 
     await this.cacheManager.set('queue', queue, 0);

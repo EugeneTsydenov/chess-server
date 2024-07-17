@@ -16,10 +16,10 @@ export class CancelSearchUseCase
       return;
     }
 
-    queue = queue.filter(
-      (room) =>
-        room.player1.id !== input.userId || room.player2?.id !== input.userId,
-    );
+    queue = queue.filter((room) => {
+      return room.player1.id !== input.userId;
+    });
+    console.log(queue);
     await this.cacheManager.set('queue', queue, 0);
   }
 }

@@ -71,7 +71,6 @@ export class AuthController implements IAuthController {
   ) {
     try {
       const refreshToken = req.cookies.refreshToken;
-      console.log(refreshToken);
       const accessToken = req.headers.authorization?.split(' ')[1];
       const refreshUseCase = await this.refreshUseCase.execute(
         new RefreshUseCaseInputDto(refreshToken, accessToken),

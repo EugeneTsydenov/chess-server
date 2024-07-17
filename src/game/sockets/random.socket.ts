@@ -58,8 +58,7 @@ export class RandomSocket implements IRandomSocket {
     @MessageBody() body: { roomId: string },
     @ConnectedSocket() client: any,
   ): void {
-    console.log('join_room');
     client.join(body.roomId);
-    this.socket.emit('start_game', { roomId: body.roomId });
+    client.emit('start_game', { roomId: body.roomId });
   }
 }

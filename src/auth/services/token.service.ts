@@ -79,7 +79,6 @@ export class TokenService implements ITokenService {
         jti: jti,
       };
     } catch (err) {
-      console.log(err);
       throw new HttpException(
         { message: 'Something went wrong!', errors: [] },
         500,
